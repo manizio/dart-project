@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Anime with ChangeNotifier{
-  var _animesJson;
+  var _animesJson = [];
 
   get animesJson => _animesJson;
 
@@ -11,12 +11,12 @@ class Anime with ChangeNotifier{
     var animeUri = Uri(
       scheme: 'https',
       host: 'api.jikan.moe',
-      path: 'v4/anime',
-      queryParameters: {'q': 'naruto'},
+      path: 'v4/top/anime',
     );
 
     var jsonString = await http.read(animeUri);
-    _animesJson = jsonDecode(jsonString);
+    var data = jsonDecode(jsonString);
+    _animesJson = data["data"];
     notifyListeners();
   }
 }
