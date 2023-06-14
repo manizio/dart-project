@@ -41,8 +41,10 @@ class MyHomePage extends StatelessWidget{
         title: Text('Homepage'),
       ),
       body: Center(
-        child: Column(
-          children: [DataTableWidget(jsonObjects: context.watch<Anime>().animesJson)]
+        child: SingleChildScrollView(
+          child: Column(
+            children: [DataTableWidget(jsonObjects: context.watch<Anime>().animesJson)]
+          ),
         ),
       ),
       floatingActionButton: Row(
