@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/anime_provider.dart';
-
+import 'nav_drawer.dart';
 
 class DataTableWidget extends StatelessWidget {
   final List jsonObjects;
@@ -22,13 +22,15 @@ class DataTableWidget extends StatelessWidget {
               ).toList(),
               rows: jsonObjects.map(
                 (obj) => DataRow(
-                  cells: propertyNames.map((e) => DataCell(Text("${obj[e]}")),).toList()
+                  cells: propertyNames.map((e) => DataCell(
+                    Text("${obj[e]}"),
+                    onTap: () => {print(obj['mal_id'])},
+                  ),).toList()
                 )
               ).toList()
           );
   }
 }
-
 
 class MyHomePage extends StatelessWidget{
   MyHomePage ({Key? key}) : super (key:key);
@@ -37,21 +39,22 @@ class MyHomePage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         title: Text('Homepage'),
       ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
-            children: [DataTableWidget(jsonObjects: context.watch<Anime>().animesJson)]
+            children: [DataTableWidget(jsonObjects: context.watch<Anime>().topAnimesJson)]
           ),
-        ),
+        )
       ),
       floatingActionButton: Row(
         children: [
           FloatingActionButton(
             key: Key('load_floatingActionButton'),
-            onPressed: () => context.read<Anime>().loadAnimes(),
+            onPressed: () => context.read<Anime>().loadBestAnimes(),
             tooltip: 'Load',
             child: Icon(Icons.play_arrow)
           )
