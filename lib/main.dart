@@ -7,7 +7,7 @@ import 'screens/search_screen.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => Anime()),
+      ChangeNotifierProvider(create: (_) => Anime()..loadBestAnimes()),
     ],
     child: MyApp(),
   ));

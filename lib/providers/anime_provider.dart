@@ -15,7 +15,14 @@ class Anime with ChangeNotifier{
   get animeSearchJson => _animeSearchJson;
   get totalResults => _totalResults;
 
+  bool _loadingBestAnimes = false;
+  get loadingBestAnimes => _loadingBestAnimes;
+
+  // TODO: adicionar variável de load para searchAnime
+
   void loadBestAnimes() async {
+    _loadingBestAnimes = true;
+    notifyListeners();
     var animeUri = Uri(
       scheme: 'https',
       host: 'api.jikan.moe',
@@ -25,6 +32,7 @@ class Anime with ChangeNotifier{
     var jsonString = await http.read(animeUri);
     var data = jsonDecode(jsonString);
     _topAnimesJson = data["data"];
+    _loadingBestAnimes = false;
     notifyListeners();
   }
 
@@ -42,6 +50,8 @@ class Anime with ChangeNotifier{
   }
 
   void searchAnime(string) async {
+    // TODO: adicionar variável de load para checar se a requisição foi concluida
+
     var animeUri = Uri(
       scheme: 'https',
       host: 'api.jikan.moe',

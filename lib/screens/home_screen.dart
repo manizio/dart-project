@@ -38,6 +38,14 @@ class MyHomePage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+
+    // carregar o estado da aplicação na variável state
+    final state = context.watch<Anime>();
+    final res = state.topAnimesJson;
+
+    // checar se a requisição foi concluída
+    final loading = state.loadingBestAnimes;
+    if (loading) return Center(child: CircularProgressIndicator());
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -46,7 +54,7 @@ class MyHomePage extends StatelessWidget{
       body: Center(
         child: SingleChildScrollView(
           child: Column(
-            children: [DataTableWidget(jsonObjects: context.watch<Anime>().topAnimesJson)]
+            children: [DataTableWidget(jsonObjects: res)]
           ),
         )
       ),

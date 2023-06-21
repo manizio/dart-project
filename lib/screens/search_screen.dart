@@ -35,8 +35,14 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+
+    // TODO: adicionar variável state
     Provider.of<Anime>(context).searchAnime(query);
+
+    // TODO: res = state.animeSearchJson
     final res = Provider.of<Anime>(context, listen: false).animeSearchJson;
+
+    // talvez isso seja desnecessário
     final total = Provider.of<Anime>(context, listen: false).totalResults;
 
     return ListView.builder(
@@ -50,6 +56,7 @@ class CustomSearchDelegate extends SearchDelegate {
         var result = res[index]['title'];
         return ListTile(
           title: Text(result),
+          onTap: () => {print(res[index]['mal_id'])},
         );
       },
     );
