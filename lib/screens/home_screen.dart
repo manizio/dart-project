@@ -24,7 +24,10 @@ class DataTableWidget extends StatelessWidget {
                 (obj) => DataRow(
                   cells: propertyNames.map((e) => DataCell(
                     Text("${obj[e]}"),
-                    onTap: () => {print(obj['mal_id'])},
+                    onTap: () {
+                      context.read<AnimeState>().loadAnime(obj['mal_id']);
+                      Navigator.pushNamed(context, '/detail');
+                    },
                   ),).toList()
                 )
               ).toList()
@@ -40,7 +43,7 @@ class MyHomePage extends StatelessWidget{
   Widget build(BuildContext context){
 
     // carregar o estado da aplicação na variável state
-    final state = context.watch<Anime>();
+    final state = context.watch<AnimeState>();
     final res = state.topAnimesJson;
 
     // checar se a requisição foi concluída
@@ -62,7 +65,7 @@ class MyHomePage extends StatelessWidget{
         children: [
           FloatingActionButton(
             key: Key('load_floatingActionButton'),
-            onPressed: () => context.read<Anime>().loadBestAnimes(),
+            onPressed: () => context.read<AnimeState>().loadBestAnimes(),
             tooltip: 'Load',
             child: Icon(Icons.play_arrow)
           )
