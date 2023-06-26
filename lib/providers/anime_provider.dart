@@ -3,6 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class AnimeState with ChangeNotifier{
+  bool _showFullDescription = false;
+  bool get showFullDescription => _showFullDescription;
+  void toggleDescription() {
+    _showFullDescription = !_showFullDescription;
+    notifyListeners();
+  }
+
   var _topAnimesJson = [];
   var _animeJson;
   
