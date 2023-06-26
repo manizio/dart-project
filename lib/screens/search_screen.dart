@@ -37,13 +37,18 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
 
     // TODO: adicionar variável state
-    Provider.of<Anime>(context).searchAnime(query);
+    final state = context.watch<Anime>();
+    state.searchAnime(query);
 
     // TODO: res = state.animeSearchJson
-    final res = Provider.of<Anime>(context, listen: false).animeSearchJson;
+    final res = state.animeSearchJson;
+
+    final loading = state.loadingSearch;
+
+    if (loading) return Center(child: CircularProgressIndicator());
 
     // talvez isso seja desnecessário
-    final total = Provider.of<Anime>(context, listen: false).totalResults;
+    // final total = Provider.of<Anime>(context, listen: false).totalResults;
 
     return ListView.builder(
       itemCount: 10,

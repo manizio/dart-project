@@ -18,6 +18,9 @@ class Anime with ChangeNotifier{
   bool _loadingBestAnimes = false;
   get loadingBestAnimes => _loadingBestAnimes;
 
+  bool _loadingSearch = false;
+  get loadingSearch => _loadingSearch;
+
   // TODO: adicionar variável de load para searchAnime
 
   void loadBestAnimes() async {
@@ -51,6 +54,8 @@ class Anime with ChangeNotifier{
 
   void searchAnime(string) async {
     // TODO: adicionar variável de load para checar se a requisição foi concluida
+    _loadingSearch = true;
+    notifyListeners();
 
     var animeUri = Uri(
       scheme: 'https',
@@ -63,6 +68,7 @@ class Anime with ChangeNotifier{
     var data = jsonDecode(jsonString);
     _animeSearchJson = data["data"];
     _totalResults = data["pagination"]["items"]["total"];
+    _loadingSearch = false;
     notifyListeners();
   }
 }
