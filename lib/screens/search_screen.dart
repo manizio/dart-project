@@ -10,13 +10,15 @@ class CustomSearchDelegate extends SearchDelegate {
     'One Piece',
     'Shingeki no Kyojin'
   ];
-  
+
+  bool hasPressedEnter = false; // Flag para rastrear se o usuário pressionou Enter
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
         onPressed: () => {
-          query = ''
+          query = '',
         },
         icon: Icon(Icons.clear),
       ),
@@ -26,38 +28,29 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () => {
-        close(context, null)
-      },
-      icon: Icon(Icons.arrow_back)
-    );
+        onPressed: () => {
+              close(context, null),
+            },
+        icon: Icon(Icons.arrow_back));
   }
 
   @override
   Widget buildResults(BuildContext context) {
-
-    // TODO: adicionar variável state
     final state = context.watch<AnimeState>();
-    state.searchAnime(query);
 
-    // TODO: res = state.animeSearchJson
+    if (hasPressedEnter) {
+      state.searchAnime(query);
+      hasPressedEnter = false; // Redefine a flag após realizar a pesquisa
+    }
+
     final res = state.animeSearchJson;
-
     final loading = state.loadingSearch;
 
     if (loading) return Center(child: CircularProgressIndicator());
 
-    // talvez isso seja desnecessário
-    // final total = Provider.of<Anime>(context, listen: false).totalResults;
-
     return ListView.builder(
-      itemCount: 10,
+      itemCount: res.length,
       itemBuilder: (context, index) {
-        if(!res.asMap().containsKey(index)){
-          return ListTile(
-            title: Text(" ")
-          );
-        }
         var result = res[index]['title'];
         return ListTile(
           title: Text(result),
@@ -70,15 +63,15 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var anime in searchTerms){
-      if (anime.toLowerCase().contains(query.toLowerCase())){
+    for (var anime in searchTerms) {
+      if (anime.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(anime);
       }
     }
 
     return ListView.builder(
       itemCount: matchQuery.length,
-      itemBuilder: (context, index){
+      itemBuilder: (context, index) {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),
@@ -88,11 +81,16 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
+  @override
+  void showResults(BuildContext context) {
+    hasPressedEnter = true; // Define a flag como verdadeiro quando o usuário pressionar Enter
+    super.showResults(context);
+  }
 }
 
 class SearchScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     context.read<AnimeState>().loadBestAnimes();
     return Scaffold(
       drawer: NavDrawer(),
@@ -103,10 +101,7 @@ class SearchScreen extends StatelessWidget {
             icon: Icon(Icons.search),
             tooltip: 'Pesquisar',
             onPressed: () => {
-              showSearch(
-                context: context,
-                delegate: CustomSearchDelegate()
-              )
+              showSearch(context: context, delegate: CustomSearchDelegate())
             },
           ),
         ],
