@@ -5,33 +5,20 @@ import 'nav_drawer.dart';
 
 class DataTableWidget extends StatelessWidget {
   final List jsonObjects;
-  final List<String> columnNames;
-  final List<String> propertyNames;
-
-  DataTableWidget({this.jsonObjects = const [], this.columnNames = const ["Título", "Tipo", "Episódios"], this.propertyNames = const ["title", "type", "episodes"]});
+  DataTableWidget({this.jsonObjects = const [],});
 
   @override
   Widget build(BuildContext context){
-    return DataTable(
-              columns: columnNames.map(
-                (nome) => DataColumn(
-                  label: Expanded(
-                    child: Text(nome),
-                  )
-                )
-              ).toList(),
-              rows: jsonObjects.map(
-                (obj) => DataRow(
-                  cells: propertyNames.map((e) => DataCell(
-                    Text("${obj[e]}"),
-                    onTap: () {
-                      context.read<AnimeState>().loadAnime(obj['mal_id']);
-                      Navigator.pushNamed(context, '/detail');
-                    },
-                  ),).toList()
-                )
-              ).toList()
-          );
+    print(jsonObjects);
+    return GridView.count(
+      //primary: false,
+      //padding: const EdgeInsets.all(20),
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      crossAxisCount: 2,
+      children: jsonObjects.map(
+        (obj) => Center(child: Text(obj["title"]))).toList()
+        );
   }
 }
 
@@ -55,12 +42,9 @@ class MyHomePage extends StatelessWidget{
         title: Text('Homepage'),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [DataTableWidget(jsonObjects: res)]
-          ),
-        )
+        child: DataTableWidget(jsonObjects: res)
       ),
+      //bottomNavigationBar: LoadingWidget(showLoading: state.loadingMoreData),
       floatingActionButton: Row(
         children: [
           FloatingActionButton(
@@ -72,5 +56,14 @@ class MyHomePage extends StatelessWidget{
         ],
       ),
     );
+  }
+}
+
+class LoadingWidget extends StatelessWidget{
+  final bool showLoading;
+  LoadingWidget({this.showLoading=true});
+  @override
+  Widget build(BuildContext context){
+    return showLoading ? Center(child: Text("loading")): Center(child: Text("mamae eu to na globo"));
   }
 }
