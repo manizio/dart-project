@@ -54,7 +54,10 @@ class CustomSearchDelegate extends SearchDelegate {
         var result = res[index]['title'];
         return ListTile(
           title: Text(result),
-          onTap: () => {print(res[index]['mal_id'])},
+          onTap: (){
+            context.read<AnimeState>().loadAnime(res[index]['mal_id']);
+            Navigator.pushNamed(context,'/detail');
+          },
         );
       },
     );
