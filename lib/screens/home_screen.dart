@@ -15,10 +15,33 @@ class DataTableWidget extends StatelessWidget {
       //padding: const EdgeInsets.all(20),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
-      crossAxisCount: 2,
+      crossAxisCount: 3,
       children: jsonObjects.map(
-        (obj) => Center(child: Text(obj["title"]))).toList()
-        );
+        (obj) => Center(child: Card(
+          
+          elevation: 5.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          child: Container(
+            decoration:BoxDecoration(
+              image:
+                DecorationImage(
+                  image:
+                    NetworkImage(
+                      obj['images']['jpg']['large_image_url'],
+                    ),
+                    fit: BoxFit.fill,
+              ),
+            ) 
+              
+              
+                  
+          ),
+          margin: EdgeInsets.only(left: 30, right: 30, bottom: 7),
+        ))).toList()
+);
   }
 }
 
