@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/anime_provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'nav_drawer.dart';
 
-class DataTableWidget extends StatelessWidget {
+class DataTableWidget extends HookWidget {
   final List jsonObjects;
   DataTableWidget({this.jsonObjects = const [],});
 
   @override
   Widget build(BuildContext context){
-    print(jsonObjects);
+    var controller = useScrollController();
+    useEffect(
+      (){
+        controller.addListener(
+          (){
+            if(controller.position.pixels == controller.position.maxScrollExtent){
+              context.read<AnimeState>().loadMoreData();
+            }
+          }
+        );
+      }, [controller]
+    );
+    
     return GridView.count(
       //primary: false,
       //padding: const EdgeInsets.all(20),
+      controller: controller,
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       crossAxisCount: 3,
@@ -73,16 +87,6 @@ class MyHomePage extends StatelessWidget{
         child: DataTableWidget(jsonObjects: res)
       ),
       //bottomNavigationBar: LoadingWidget(showLoading: state.loadingMoreData),
-      floatingActionButton: Row(
-        children: [
-          FloatingActionButton(
-            key: Key('load_floatingActionButton'),
-            onPressed: () => context.read<AnimeState>().loadBestAnimes(),
-            tooltip: 'Load',
-            child: Icon(Icons.play_arrow)
-          )
-        ],
-      ),
     );
   }
 }

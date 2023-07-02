@@ -70,6 +70,7 @@ class AnimeState with ChangeNotifier{
 
     _topAnimesJson.addAll(newData);
     _loadingMoreData = false;
+    _requestPage += 1;
     notifyListeners();
 
   }

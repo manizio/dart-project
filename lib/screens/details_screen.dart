@@ -14,17 +14,64 @@ class AnimeInfoWidget extends StatelessWidget {
     final description = animeJson['synopsis'];
     final shortenedDescription = description.substring(0, 100);
 
-
     return Center(child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Center(
           child:
-          Image.network(
-            animeJson['images']['jpg']['large_image_url'],
-            fit: BoxFit.cover,
-            height: 200,
+          Row(
+            children: [
+              Card(
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: SizedBox(
+                  width: 336,
+                  height: 480,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          animeJson['images']['jpg']['large_image_url'],
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ), 
+                margin: EdgeInsets.only(left: 30, right: 30, bottom: 7),
+              ),
+              Card(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: ListTile(
+                        title: Text("Episódios: ${animeJson['episodes']}"),
+                        subtitle:Text("${animeJson['status']}"),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.favorite, color: Colors.pink),
+                            Text("${animeJson['favorites']}")
+                          ]
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
+          // Image.network(
+          //   animeJson['images']['jpg']['large_image_url'],
+          //   fit: BoxFit.cover,
+          //   height: 200,
+          // ),
         ),
 
         Padding(
