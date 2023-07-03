@@ -19,7 +19,7 @@ class AnimeInfoWidget extends StatelessWidget {
       children: <Widget>[
         Center(
           child:
-          Row(
+          Column(
             children: [
               Card(
                 elevation: 5.0,
